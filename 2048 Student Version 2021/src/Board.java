@@ -4,6 +4,7 @@ public class Board {
  
 	private int[][] board; // holds state of game
 	private Random rnd = new Random(0); // setup random # generator
+	private int size; //non-zero tiles on the board
 	
 	//What instance variable can you add to keep track of the size or the number of tiles occupied?
 	
@@ -14,6 +15,8 @@ public class Board {
 		
 		// instantiate the board
 		board = new int[4][4];
+		size = 2;
+		
 		populateOne();
 		populateOne();
 	}
@@ -33,7 +36,7 @@ public class Board {
 	// overriding a method is when a "child"
 	// class implement the exact same method
 	// that its parent class has
-	public String toString() {
+	public String toString(int number, int r, int c) {
 		
 		/*
 		 * Use the String formatter to pad the numbers with leading 0s
@@ -45,12 +48,18 @@ public class Board {
 		 *     
 		 */
 		
-		//setup loops to visit
-		//every spot possible
+		String newStr = String.format("$04d", number);
 		
+		for(int row = 0; row < board.length; row++)
+		{
+			for(int col = 0; col < board[row].length; col++)
+			{
+				System.out.print(String.format("%04d", board[row][col]) + " ");
+			}
+			System.out.println("");
+		}		
 		
-		
-		return "";
+		return newStr;
 	}
 
 	/*
@@ -69,12 +78,71 @@ public class Board {
 		// for randomness, generate a row and column
 		// check if that tile is empty, if it is NOT empty,
 		// generate another set of row and column
-		// what happens if the entire board is full??! 
+		// what happens if the entire board is full??!
+		boolean isThereOpen = false;
+		
+		for(int row = 0; row<board.length; row++)
+		{
+			for(int col = 0; col<board[row].length; col++)
+			{
+				if(board[row][col] == 0)
+				{
+					isThereOpen = true;
+				}
+			}
+		}
+		
+		if(isThereOpen == false)
+		{
+			gameOver();
+		}
+		
+		int random = rnd.nextInt(10) + 1;
+		int populateNumber;
 		
 		
+		if(random >  9)
+		{
+			populateNumber = 4;
+		}
+		else
+		{
+			populateNumber = 2;
+		}
 		
-			
-
+		
+		int randomRow = rnd.nextInt(4) + 0;
+		
+		int randomCol = rnd.nextInt(4) + 0;
+		
+		int isFinished = 0;
+		
+		while(isFinished == 0)
+		{
+			if(board[randomRow][randomCol] == 0)
+			{
+				board[randomRow][randomCol] = populateNumber;
+				
+				isFinished++;
+			}
+			else
+			{
+				randomRow = rnd.nextInt(4)+0;
+				randomCol = rnd.nextInt(4)+0;
+			}
+		}
+	}
+	
+	public void eraseBoard()
+	{
+		for(int row = 0; row < board.length; row++)
+		{
+			for(int col = 0; col < board[row].length; col++)
+			{
+				System.out.print(String.format("%04d", board[row][col]) + " ");
+			}
+			System.out.println("");
+		}	
 	}
 
 	/*
