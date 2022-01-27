@@ -97,11 +97,11 @@ public class Board {
 			gameOver();
 		}
 		
-		int random = rnd.nextInt(10) + 1;
+		int random = rnd.nextInt(9) + 1;
 		int populateNumber;
 		
 		
-		if(random >  9)
+		if(random >  8)
 		{
 			populateNumber = 4;
 		}
@@ -139,9 +139,8 @@ public class Board {
 		{
 			for(int col = 0; col < board[row].length; col++)
 			{
-				System.out.print(String.format("%04d", board[row][col]) + " ");
+					board[row][col] = 0;
 			}
-			System.out.println("");
 		}	
 	}
 
@@ -156,10 +155,17 @@ public class Board {
 	 * [4 0 0 0]->[0 0 0 4]
 	 */
 
-	public void slideRight(int[] row) {
+	public void slideRight(int[] row)
+	{
 		
-
-	
+		for(int digit = row.length-2; digit >= 0; digit--)
+		{
+			if(row[digit] != 0 && row[digit+1] == 0)
+			{
+				row[digit+1] = row[digit];
+				row[digit] = 0;
+			}
+		}	
 	}
 
 	/*
@@ -177,6 +183,10 @@ public class Board {
 
 		// go through 2D array, move all digits as far right as possible
 		//setup a loop to grab ONE row at a time from 2d array board
+		for(int row = 0; row < board.length; row ++)
+		{
+			slideRight(board[row]);
+		}
 	
 		
 	}
@@ -190,8 +200,16 @@ public class Board {
 	 * [2 0 0 2] -> [2 2 0 0]
 	 */
 
-	public void slideLeft(int[] arr) {
-		
+	public void slideLeft(int[] arr) 
+	{
+		for(int digit = 1; digit <= arr.length-1; digit++)
+		{
+			if(arr[digit] != 0 && arr[digit-1] == 0)
+			{
+				arr[digit-1] = arr[digit];
+				arr[digit] = 0;
+			}
+		}
 		
 		
 	}
@@ -211,6 +229,10 @@ public class Board {
 		
 		//visit every single row in the 2D array
 		//call the slideLeft method that takes in one argument
+		for(int row = 0; row < board.length; row ++)
+		{
+			slideLeft(board[row]);
+		}
 		
 		
 	}
@@ -221,8 +243,14 @@ public class Board {
 	 */
 	public int[] getCol(int[][] data, int c) {
 		
+		int[] col = new int[data.length];
+		for(int row = 0; row<data.length; row++)
+		{
+			col[row] = data[row][c];
+		}
+		
 		//you can also add print out statements here
-		return new int[0];
+		return col;
 		
 	}
 
@@ -232,9 +260,12 @@ public class Board {
 	 * zero elements are considered open spots.
 	 */
 
-	public void slideUp(int[] arr) {
+	public void slideUp(int[] arr) 
+	{
 		/* calls a helper method */
 		// do not rewrite logic you already have!
+		slideLeft(arr);
+		
 	}
 
 	/*
@@ -243,7 +274,8 @@ public class Board {
 	 * 
 	 * You must use slideUp and getCol for full credit.
 	 */
-	public void slideUp() {
+	public void slideUp() 
+	{
 		
 		//visit every column index
 		//grab each column as an array using getCol -> keep track of it in a 1d array
@@ -251,15 +283,24 @@ public class Board {
 		//have slideLeft perform manipulation on the array
 		// copy over the 1D array representation of the column
 		// back to the 2D board array
-
 		
-		
+		for(int col = 0; col < board.length; col++)
+		{
+			int[] OneD = new int[4];
+			OneD = getCol(board, col);
+			slideLeft(OneD);
+			
+			for(int cCol = 0; cCol < board[col].length; cCol ++)
+			{
+				board[col][cCol] = OneD[cCol];
+			}
+		}
 		
 	}
 
-	public void slideDown(int[] arr) {
-
-		
+	public void slideDown(int[] arr) 
+	{
+		slideRight(arr);
 	}
 
 	/*
@@ -268,8 +309,12 @@ public class Board {
 	 * You must use slideDown and getCol for full credit.
 	 */
 
-	public void slideDown() {
-
+	public void slideDown() 
+	{
+		for(int row = 0; row < board.length; row++)
+		{
+			slideRight(getCol(board, row));
+		}
 	}
 
 	/*
@@ -284,8 +329,19 @@ public class Board {
 	 * Notice that the left element is zeroed out.
 	 */
 
-	public void combineRight() {
-
+	public void combineRight() 
+	{
+		for(int r = board.length-1; r > 0; r --)
+		{
+			for(int c = board[r].length-1; c > 0; c --)
+			{
+				if(board[r][c] == board[r][c-1])
+				{
+					board[r][c] += board[r][c-1];
+					board[r][c-1] = 0;
+				}
+			}
+		}
 	}
 
 	/*
