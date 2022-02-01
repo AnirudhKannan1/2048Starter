@@ -286,13 +286,13 @@ public class Board {
 		
 		for(int col = 0; col < board.length; col++)
 		{
-			int[] OneD = new int[4];
-			OneD = getCol(board, col);
-			slideLeft(OneD);
+			int[] var = getCol(board,col);
 			
-			for(int cCol = 0; cCol < board[col].length; cCol ++)
+			slideUp(var);
+			
+			for(int row = 0; row < board[col].length; row++)
 			{
-				board[col][cCol] = OneD[cCol];
+				board[row][col] = var[row];
 			}
 		}
 		
@@ -311,9 +311,16 @@ public class Board {
 
 	public void slideDown() 
 	{
-		for(int row = 0; row < board.length; row++)
+		for(int col = 0; col < board.length; col++)
 		{
-			slideRight(getCol(board, row));
+			int[] var = getCol(board,col);
+			
+			slideUp(var);
+			
+			for(int row = 0; row < board[col].length; row++)
+			{
+				board[row][col] = var[row];
+			}
 		}
 	}
 
@@ -349,8 +356,19 @@ public class Board {
 	 * two elements are combined
 	 */
 
-	public void combineLeft() {
-		
+	public void combineLeft() 
+	{
+		for(int r = 0; r < board.length; r ++)
+		{
+			for(int c = 0; c < board[r].length-1; c ++)
+			{
+				if(board[r][c] == board[r][c+1])
+				{
+					board[r][c+1] += board[r][c];
+					board[r][c] = 0;
+				}
+			}
+		}
 	}
 	
 	/*
@@ -358,8 +376,19 @@ public class Board {
 	 * two elements are combined
 	 */
 
-	public void combineUp() {
-
+	public void combineUp() 
+	{
+		for(int r = 0; r < board.length; r ++)
+		{
+			for(int c = 0; c < board[r].length-1; c ++)
+			{
+				if(board[c][r] == board[c+1][r])
+				{
+					board[c+1][r] += board[c][r];
+					board[c][r] = 0;
+				}
+			}
+		}
 	}
 
 	/*
@@ -367,8 +396,19 @@ public class Board {
 	 * elements are combined
 	 */
 
-	public void combineDown() {
-
+	public void combineDown() 
+	{
+		for(int r = board.length-1; r > 0; r --)
+		{
+			for(int c = board[r].length-1; c > 0; c --)
+			{
+				if(board[c][r] == board[c-1][r])
+				{
+					board[c][r] += board[c-1][r];
+					board[c-1][r] = 0;
+				}
+			}
+		}
 	}
 
 	
@@ -382,27 +422,41 @@ public class Board {
 		//1) numbers slide to the left
 		//2) combine
 		//3) slide
+		slideLeft();
+		combineLeft();
+		slideLeft();
 	}
 
-	public void right() {
-
+	public void right() 
+	{
+		slideRight();
+		combineRight();
+		slideRight();
 	}
 
-	public void up() {
-
+	public void up() 
+	{
+		slideUp();
+		combineUp();
+		slideUp();
 	}
 
-	public void down() {
-
+	public void down() 
+	{
+		slideDown();
+		combineDown();
+		slideDown();
 	}
 	
 	
 
-	public boolean gameOver() {
+	public boolean gameOver() 
+	{
 		return false;
 	}
 
-	public int[][] getBoard() {
+	public int[][] getBoard() 
+	{
 		return board;
 	}
 
