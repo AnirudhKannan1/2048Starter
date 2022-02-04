@@ -315,7 +315,7 @@ public class Board {
 		{
 			int[] var = getCol(board,col);
 			
-			slideUp(var);
+			slideDown(var);
 			
 			for(int row = 0; row < board[col].length; row++)
 			{
